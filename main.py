@@ -17,7 +17,10 @@ class BinaryNumber:
 ## Implement multiplication functions here. Note that you will have to
 ## ensure that x, y are appropriately sized binary vectors for a
 ## divide and conquer approach.
-
+def _quadratic_multiply(x, y):
+    # this just converts the result from a BinaryNumber to a regular int
+    return quadratic_multiply(x,y).decimal_val
+  
 def binary2int(binary_vec): 
     if len(binary_vec) == 0:
         return BinaryNumber(0)
@@ -45,11 +48,39 @@ def pad(x,y):
     return x,y
 
 def quadratic_multiply(x, y):
-    ### TODO
-    pass
-    ###
+  
+  xvec = x.binary_vec
+  yvec = y.binary_vec
 
+  #pad to make them the same length
+  pad(xvec,yvec)
+  length = len(xvec)
 
+  #base case
+  if length <= 1:
+    return BinaryNumber(x.decimal_val*y.decimal_val)
+  else:
+    #split the two vectors in half
+    split_x = split_number(xvec)
+    x_left = split_x[0]
+    x_right = split_x[1]
+
+    split_y = split_number(yvec)
+    y_left = split_y[0]
+    y_right = split_y[1]    
+
+    #use the formula
+    product_for_product1 = _quadratic_multiply(x_left, x_right)
+    product1 = bit_shift(BinaryNumber(product_for_product1), length).decimal_val
+    sum_product2 = _quadratic_multiply(x_left,y_right) + _quadratic_multiply(x_right, y_left)
+
+    product2 = (bit_shift(BinaryNumber(sum_product2), length//2)).decimal_val
+    
+    product3 = _quadratic_multiply(x_right,y_right)
+    
+
+    return product1 + product2 + product3
+    
 
 ## Feel free to add your own tests here.
 def test_multiply():
