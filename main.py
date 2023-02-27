@@ -57,7 +57,9 @@ def quadratic_multiply(x, y):
   length = len(xvec)
 
   #base case
-  if length <= 1:
+  if length == 0:
+    return 0
+  if length == 1:
     return BinaryNumber(x.decimal_val*y.decimal_val)
   else:
     #split the two vectors in half
@@ -70,10 +72,10 @@ def quadratic_multiply(x, y):
     y_right = split_y[1]    
 
     #use the formula
-    product_for_product1 = _quadratic_multiply(x_left, x_right)
-    product1 = bit_shift(BinaryNumber(product_for_product1), length).decimal_val
+    product_for_product1 = quadratic_multiply(x_left, x_right)
+    product1 = bit_shift(product_for_product1, length).decimal_val
+    
     sum_product2 = _quadratic_multiply(x_left,y_right) + _quadratic_multiply(x_right, y_left)
-
     product2 = (bit_shift(BinaryNumber(sum_product2), length//2)).decimal_val
     
     product3 = _quadratic_multiply(x_right,y_right)
